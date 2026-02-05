@@ -1,0 +1,48 @@
+{
+  "name": "ocs-magnetic-system-tool",
+  "version": "1.0.0",
+  "description": "OCS Magnetic System Tool - A comprehensive magnetic sensor simulation platform",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "^0.160.0",
+    "@react-three/fiber": "^8.15.0",
+    "@react-three/drei": "^9.92.0",
+    "recharts": "^2.10.0",
+    "zustand": "^4.4.0",
+    "lucide-react": "^0.294.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.0.0",
+    "class-variance-authority": "^0.7.0",
+    "@radix-ui/react-slider": "^1.1.0",
+    "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-tabs": "^1.0.0",
+    "@radix-ui/react-tooltip": "^1.0.0",
+    "@radix-ui/react-dialog": "^1.0.0",
+    "@radix-ui/react-dropdown-menu": "^2.0.0",
+    "react-hot-toast": "^2.4.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@types/three": "^0.160.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.3.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.2.0"
+  }
+}
