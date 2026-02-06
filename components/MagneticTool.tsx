@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useToolStore } from '@/store/toolStore'
 import StepIndicator from '@/components/guide/StepIndicator'
+import PresetStep from '@/components/guide/PresetStep'
 import SensorStep from '@/components/guide/SensorStep'
 import MagnetStep from '@/components/guide/MagnetStep'
 import PositionStep from '@/components/guide/PositionStep'
@@ -10,16 +11,18 @@ import SimulationStep from '@/components/guide/SimulationStep'
 import ResultsStep from '@/components/guide/ResultsStep'
 import Canvas3D from '@/components/layout/Canvas3D'
 import { Toaster } from 'react-hot-toast'
-import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
+import { ChevronLeft, ChevronRight, RotateCcw, Settings } from 'lucide-react'
 
-export type WizardStep = 'sensor' | 'magnet' | 'position' | 'simulation' | 'results'
+export type WizardStep = 'preset' | 'sensor' | 'magnet' | 'position' | 'simulation' | 'results'
 
 export default function MagneticTool() {
-  const [currentStep, setCurrentStep] = useState<WizardStep>('sensor')
+  const [currentStep, setCurrentStep] = useState<WizardStep>('preset')
   const [showPreview, setShowPreview] = useState(true)
+  const [useCustomConfig, setUseCustomConfig] = useState(false)
   const { configuration, isSimulating, simulationResult, resetConfiguration } = useToolStore()
 
   const steps: { id: WizardStep; title: string; description: string }[] = [
+    { id: 'preset', title: '选择预设', description: '快速开始或自定义' },
     { id: 'sensor', title: '选择传感器', description: '选择磁传感器型号' },
     { id: 'magnet', title: '选择磁铁', description: '选择或自定义磁铁' },
     { id: 'position', title: '配置位置', description: '调整传感器和磁铁位置' },
@@ -31,6 +34,8 @@ export default function MagneticTool() {
 
   const canProceed = () => {
     switch (currentStep) {
+      case 'preset':
+        return true
       case 'sensor':
         return configuration.sensor !== null
       case 'magnet':
@@ -66,11 +71,28 @@ export default function MagneticTool() {
 
   const restart = () => {
     resetConfiguration()
-    setCurrentStep('sensor')
+    setCurrentStep('preset')
+    setUseCustomConfig(false)
+  }
+
+  const handlePresetComplete = () => {
+    // 如果选择了预设配置，直接跳到仿真步骤
+    if (configuration.sensor && configuration.magnet) {
+      setCurrentStep('simulation')
+    } else {
+      goToNext()
+    }
+  }
+
+  const handleCustomConfig = () => {
+    setUseCustomConfig(true)
+    goToNext()
   }
 
   const renderStepContent = () => {
     switch (currentStep) {
+      case 'preset':
+        return <PresetStep onComplete={handlePresetComplete} />
       case 'sensor':
         return <SensorStep onComplete={goToNext} />
       case 'magnet':
@@ -152,7 +174,7 @@ export default function MagneticTool() {
                 {currentStepIndex + 1} / {steps.length}
               </span>
 
-              {currentStep !== 'results' && (
+              {currentStep !== 'results' && currentStep !== 'preset' && (
                 <button
                   onClick={goToNext}
                   disabled={!canProceed() || isSimulating}

@@ -10,6 +10,7 @@ import {
   Magnet,
   Vector3D
 } from '@/types'
+import { presetTemplates } from '@/lib/database/sensors'
 
 interface ToolState {
   // UI State
@@ -24,6 +25,7 @@ interface ToolState {
   updateMagnetPosition: (position: { position?: Vector3D; rotation?: Vector3D }) => void
   updateParams: (params: Partial<ToolConfiguration['params']>) => void
   resetConfiguration: () => void
+  applyPreset: (presetId: string) => void
   
   // Simulation State
   isSimulating: boolean
@@ -118,6 +120,18 @@ export const useToolStore = create<ToolState>()(
         }
       })),
       resetConfiguration: () => set({ configuration: defaultConfiguration }),
+      
+      applyPreset: (presetId: string) => {
+        const preset = presetTemplates.find(p => p.id === presetId)
+        if (preset) {
+          set((state) => ({
+            configuration: {
+              ...state.configuration,
+              ...preset.configuration
+            }
+          }))
+        }
+      },
       
       // Simulation State
       isSimulating: false,

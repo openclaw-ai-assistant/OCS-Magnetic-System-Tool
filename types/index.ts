@@ -129,6 +129,7 @@ export interface PresetTemplate {
   name: string
   description: string
   category: string
+  icon?: string
   configuration: Partial<ToolConfiguration>
   thumbnail?: string
 }

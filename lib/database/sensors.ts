@@ -265,60 +265,277 @@ export const materialProperties = {
   }
 }
 
-// Preset Templates
+// Enhanced Preset Templates
 export const presetTemplates: PresetTemplate[] = [
+  // 标准配置
   {
     id: 'standard-eos',
-    name: 'Standard End-of-Shaft',
-    description: 'Typical end-of-shaft configuration',
-    category: 'Standard',
+    name: '标准轴端安装',
+    description: '最常见的轴端传感器配置，适用于一般工业应用',
+    category: '标准配置',
+    icon: '⚙️',
     configuration: {
+      sensor: magAlphaSensors[0], // MA732
+      magnet: magnetLibrary[1], // cyl-8x5-ndfeb
+      sensorPosition: {
+        position: { x: 0, y: 0, z: 2.5 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      magnetPosition: {
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
       params: { airGap: 2.5, rpm: 3000, temperature: 25, samplesPerRevolution: 360, noiseLevel: 0.1 }
     }
   },
   {
-    id: 'side-shaft',
-    name: 'Side-Shaft Mounting',
-    description: 'Side-shaft sensor configuration',
-    category: 'Standard',
+    id: 'standard-side',
+    name: '标准侧轴安装',
+    description: '侧轴传感器配置，适合空间受限的应用',
+    category: '标准配置',
+    icon: '📐',
     configuration: {
+      sensor: magAlphaSensors[2], // MA800
+      magnet: magnetLibrary[1], // cyl-8x5-ndfeb
+      sensorPosition: {
+        position: { x: 6, y: 0, z: 0 },
+        rotation: { x: 0, y: 90, z: 0 }
+      },
+      magnetPosition: {
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
       params: { airGap: 3.0, rpm: 3000, temperature: 25, samplesPerRevolution: 360, noiseLevel: 0.1 }
     }
   },
-  {
-    id: 'high-speed',
-    name: 'High-Speed Motor',
-    description: 'Optimized for high-speed motors (50k+ RPM)',
-    category: 'High Performance',
-    configuration: {
-      params: { airGap: 2.0, rpm: 50000, temperature: 80, samplesPerRevolution: 360, noiseLevel: 0.05 }
-    }
-  },
+  
+  // 高性能配置
   {
     id: 'high-precision',
-    name: 'High-Precision',
-    description: 'Maximum precision configuration',
-    category: 'High Performance',
+    name: '高精度测量',
+    description: '15位超高精度，适合精密仪器和测量设备',
+    category: '高性能',
+    icon: '🎯',
     configuration: {
+      sensor: magAlphaSensors[4], // MA600
+      magnet: magnetLibrary[2], // cyl-10x10-ndfeb
+      sensorPosition: {
+        position: { x: 0, y: 0, z: 1.5 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      magnetPosition: {
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
       params: { airGap: 1.5, rpm: 1000, temperature: 25, samplesPerRevolution: 720, noiseLevel: 0.02 }
     }
   },
   {
-    id: 'harsh-environment',
-    name: 'Harsh Environment',
-    description: 'For extreme temperature applications',
-    category: 'Industrial',
+    id: 'high-speed',
+    name: '高速电机应用',
+    description: '优化用于50000+ RPM的高速电机控制',
+    category: '高性能',
+    icon: '⚡',
     configuration: {
-      params: { airGap: 3.5, rpm: 2000, temperature: 150, samplesPerRevolution: 360, noiseLevel: 0.2 }
+      sensor: magAlphaSensors[2], // MA800
+      magnet: magnetLibrary[1], // cyl-8x5-ndfeb
+      sensorPosition: {
+        position: { x: 0, y: 0, z: 2.0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      magnetPosition: {
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      params: { airGap: 2.0, rpm: 50000, temperature: 80, samplesPerRevolution: 360, noiseLevel: 0.05 }
+    }
+  },
+  
+  // 行业应用
+  {
+    id: 'servo-motor',
+    name: '伺服电机控制',
+    description: '工业伺服系统标准配置，平衡性能和成本',
+    category: '行业应用',
+    icon: '🤖',
+    configuration: {
+      sensor: magAlphaSensors[1], // MA734
+      magnet: magnetLibrary[1], // cyl-8x5-ndfeb
+      sensorPosition: {
+        position: { x: 0, y: 0, z: 2.0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      magnetPosition: {
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      params: { airGap: 2.0, rpm: 6000, temperature: 60, samplesPerRevolution: 360, noiseLevel: 0.08 }
+    }
+  },
+  {
+    id: 'robot-joint',
+    name: '机器人关节',
+    description: '协作机器人关节专用，高可靠性和精度',
+    category: '行业应用',
+    icon: '🦾',
+    configuration: {
+      sensor: magAlphaSensors[3], // MA850 (侧轴正交安装)
+      magnet: magnetLibrary[3], // ring-15x8x5-ndfeb
+      sensorPosition: {
+        position: { x: 8, y: 0, z: 0 },
+        rotation: { x: 0, y: 90, z: 0 }
+      },
+      magnetPosition: {
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      params: { airGap: 2.5, rpm: 2000, temperature: 50, samplesPerRevolution: 360, noiseLevel: 0.05 }
+    }
+  },
+  {
+    id: 'drone-gimbal',
+    name: '无人机云台',
+    description: '轻量化设计，适合无人机稳定器应用',
+    category: '行业应用',
+    icon: '🚁',
+    configuration: {
+      sensor: magAlphaSensors[0], // MA732
+      magnet: magnetLibrary[0], // cyl-6x3-ndfeb (小型)
+      sensorPosition: {
+        position: { x: 0, y: 0, z: 1.8 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      magnetPosition: {
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      params: { airGap: 1.8, rpm: 100, temperature: 40, samplesPerRevolution: 360, noiseLevel: 0.1 }
+    }
+  },
+  {
+    id: 'automotive-eps',
+    name: '汽车电动助力转向',
+    description: '汽车EPS系统专用，高可靠性和宽温度范围',
+    category: '行业应用',
+    icon: '🚗',
+    configuration: {
+      sensor: magAlphaSensors[1], // MA734
+      magnet: magnetLibrary[3], // ring-15x8x5-ndfeb
+      sensorPosition: {
+        position: { x: 0, y: 0, z: 2.5 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      magnetPosition: {
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      params: { airGap: 2.5, rpm: 600, temperature: 85, samplesPerRevolution: 360, noiseLevel: 0.1 }
+    }
+  },
+  {
+    id: 'encoder-industrial',
+    name: '工业编码器',
+    description: '替代光电编码器的磁编码方案，抗污染能力强',
+    category: '行业应用',
+    icon: '🏭',
+    configuration: {
+      sensor: magAlphaSensors[1], // MA734
+      magnet: magnetLibrary[3], // ring-15x8x5-ndfeb
+      sensorPosition: {
+        position: { x: 0, y: 0, z: 2.0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      magnetPosition: {
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      params: { airGap: 2.0, rpm: 3000, temperature: 70, samplesPerRevolution: 360, noiseLevel: 0.08 }
+    }
+  },
+  
+  // 特殊环境
+  {
+    id: 'harsh-temp',
+    name: '高温环境应用',
+    description: '150°C高温环境，使用钐钴磁铁',
+    category: '特殊环境',
+    icon: '🔥',
+    configuration: {
+      sensor: magAlphaSensors[1], // MA734
+      magnet: magnetLibrary[4], // ring-20x10x8-smco
+      sensorPosition: {
+        position: { x: 0, y: 0, z: 3.0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      magnetPosition: {
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      params: { airGap: 3.0, rpm: 2000, temperature: 150, samplesPerRevolution: 360, noiseLevel: 0.15 }
     }
   },
   {
     id: 'low-cost',
-    name: 'Cost-Optimized',
-    description: 'Balanced performance and cost',
-    category: 'Industrial',
+    name: '成本优化方案',
+    description: '平衡性能和成本的经济型配置',
+    category: '特殊环境',
+    icon: '💰',
     configuration: {
+      sensor: magAlphaSensors[0], // MA732
+      magnet: magnetLibrary[0], // cyl-6x3-ndfeb
+      sensorPosition: {
+        position: { x: 0, y: 0, z: 3.0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      magnetPosition: {
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
       params: { airGap: 3.0, rpm: 1000, temperature: 25, samplesPerRevolution: 180, noiseLevel: 0.15 }
+    }
+  },
+  {
+    id: 'linear-position',
+    name: '线性位置检测',
+    description: '使用MagVector传感器进行直线位移测量',
+    category: '特殊环境',
+    icon: '📏',
+    configuration: {
+      sensor: magVectorSensors[2], // MV100
+      magnet: magnetLibrary[5], // rect-10x5x3-ndfeb
+      sensorPosition: {
+        position: { x: 0, y: 2, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      magnetPosition: {
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 }
+      },
+      params: { airGap: 2.0, rpm: 0, temperature: 25, samplesPerRevolution: 100, noiseLevel: 0.1 }
     }
   }
 ]
+
+// Get templates by category
+export const getTemplatesByCategory = () => {
+  const categories: Record<string, PresetTemplate[]> = {}
+  
+  presetTemplates.forEach(template => {
+    if (!categories[template.category]) {
+      categories[template.category] = []
+    }
+    categories[template.category].push(template)
+  })
+  
+  return categories
+}
+
+// Search templates
+export const searchTemplates = (query: string): PresetTemplate[] => {
+  const lowerQuery = query.toLowerCase()
+  return presetTemplates.filter(template =>
+    template.name.toLowerCase().includes(lowerQuery) ||
+    template.description.toLowerCase().includes(lowerQuery) ||
+    template.category.toLowerCase().includes(lowerQuery)
+  )
+}
