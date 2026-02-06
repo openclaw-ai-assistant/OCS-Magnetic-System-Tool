@@ -19,6 +19,7 @@ interface ToolState {
   
   // Configuration
   configuration: ToolConfiguration
+  setConfiguration: (config: ToolConfiguration) => void
   updateSensor: (sensor: Sensor | null) => void
   updateSensorPosition: (position: { position?: Vector3D; rotation?: Vector3D }) => void
   updateMagnet: (magnet: Magnet | null) => void
@@ -89,6 +90,7 @@ export const useToolStore = create<ToolState>()(
       
       // Configuration
       configuration: defaultConfiguration,
+      setConfiguration: (config) => set({ configuration: config }),
       updateSensor: (sensor) => set((state) => ({
         configuration: { ...state.configuration, sensor }
       })),

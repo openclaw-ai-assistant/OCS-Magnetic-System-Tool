@@ -8,17 +8,17 @@ import SensorStep from '@/components/guide/SensorStep'
 import MagnetStep from '@/components/guide/MagnetStep'
 import PositionStep from '@/components/guide/PositionStep'
 import SimulationStep from '@/components/guide/SimulationStep'
+import OptimizationStep from '@/components/guide/OptimizationStep'
 import ResultsStep from '@/components/guide/ResultsStep'
 import Canvas3D from '@/components/layout/Canvas3D'
 import { Toaster } from 'react-hot-toast'
-import { ChevronLeft, ChevronRight, RotateCcw, Settings } from 'lucide-react'
+import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 
-export type WizardStep = 'preset' | 'sensor' | 'magnet' | 'position' | 'simulation' | 'results'
+export type WizardStep = 'preset' | 'sensor' | 'magnet' | 'position' | 'simulation' | 'optimization' | 'results'
 
 export default function MagneticTool() {
   const [currentStep, setCurrentStep] = useState<WizardStep>('preset')
   const [showPreview, setShowPreview] = useState(true)
-  const [useCustomConfig, setUseCustomConfig] = useState(false)
   const { configuration, isSimulating, simulationResult, resetConfiguration } = useToolStore()
 
   const steps: { id: WizardStep; title: string; description: string }[] = [
@@ -27,6 +27,7 @@ export default function MagneticTool() {
     { id: 'magnet', title: '选择磁铁', description: '选择或自定义磁铁' },
     { id: 'position', title: '配置位置', description: '调整传感器和磁铁位置' },
     { id: 'simulation', title: '运行仿真', description: '执行磁场计算' },
+    { id: 'optimization', title: '自动优化', description: '寻找最佳配置' },
     { id: 'results', title: '查看结果', description: '分析仿真数据' },
   ]
 
@@ -44,6 +45,8 @@ export default function MagneticTool() {
         return true
       case 'simulation':
         return simulationResult !== null
+      case 'optimization':
+        return true
       default:
         return true
     }
@@ -63,7 +66,6 @@ export default function MagneticTool() {
 
   const goToStep = (stepId: WizardStep) => {
     const targetIndex = steps.findIndex(s => s.id === stepId)
-    // 只允许跳转到已完成或当前步骤的下一步
     if (targetIndex <= currentStepIndex + 1) {
       setCurrentStep(stepId)
     }
@@ -72,11 +74,9 @@ export default function MagneticTool() {
   const restart = () => {
     resetConfiguration()
     setCurrentStep('preset')
-    setUseCustomConfig(false)
   }
 
   const handlePresetComplete = () => {
-    // 如果选择了预设配置，直接跳到仿真步骤
     if (configuration.sensor && configuration.magnet) {
       setCurrentStep('simulation')
     } else {
@@ -84,9 +84,8 @@ export default function MagneticTool() {
     }
   }
 
-  const handleCustomConfig = () => {
-    setUseCustomConfig(true)
-    goToNext()
+  const skipOptimization = () => {
+    setCurrentStep('results')
   }
 
   const renderStepContent = () => {
@@ -101,6 +100,8 @@ export default function MagneticTool() {
         return <PositionStep onComplete={goToNext} />
       case 'simulation':
         return <SimulationStep onComplete={goToNext} />
+      case 'optimization':
+        return <OptimizationStep onComplete={goToNext} />
       case 'results':
         return <ResultsStep onRestart={restart} />
       default:
@@ -174,13 +175,22 @@ export default function MagneticTool() {
                 {currentStepIndex + 1} / {steps.length}
               </span>
 
-              {currentStep !== 'results' && currentStep !== 'preset' && (
+              {currentStep === 'simulation' && simulationResult && (
+                <button
+                  onClick={skipOptimization}
+                  className="text-sm text-slate-400 hover:text-white transition-colors"
+                >
+                  跳过优化 →
+                </button>
+              )}
+
+              {currentStep !== 'results' && currentStep !== 'preset' && currentStep !== 'simulation' && (
                 <button
                   onClick={goToNext}
                   disabled={!canProceed() || isSimulating}
                   className="flex items-center gap-2 px-6 py-2 text-sm bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed font-medium"
                 >
-                  {currentStep === 'simulation' ? '查看结果' : '下一步'}
+                  {currentStep === 'optimization' ? '查看结果' : '下一步'}
                   <ChevronRight size={18} />
                 </button>
               )}
