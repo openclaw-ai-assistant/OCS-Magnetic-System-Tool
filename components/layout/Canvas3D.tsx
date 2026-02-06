@@ -294,8 +294,8 @@ function FieldVector({ position }: { position: [number, number, number] }) {
   const scale = Math.max(0.2, 1 / (distance * 0.3))
 
   return (
-    <mesh ref={ref} position={position} scale={[scale, scale, scale]}>
-      <coneGeometry args={[0.1, 0.4, 8]} rotation={[Math.PI / 2, 0, 0]} />
+    <mesh ref={ref} position={position} scale={[scale, scale, scale]} rotation={[Math.PI / 2, 0, 0]}>
+      <coneGeometry args={[0.1, 0.4, 8]} />
       <meshStandardMaterial color="#a855f7" transparent opacity={0.6} />
     </mesh>
   )
