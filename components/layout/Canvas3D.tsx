@@ -5,7 +5,6 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { 
   OrbitControls, 
   Grid, 
-  AxisHelper,
   Box,
   Cylinder,
   Torus,
@@ -43,9 +42,6 @@ export default function Canvas3D() {
             fadeDistance={25}
             infiniteGrid
           />
-
-          {/* Axis Helper */}
-          <axesHelper args={[5]} />
 
           {/* Sensor Model */}
           <SensorModel />
