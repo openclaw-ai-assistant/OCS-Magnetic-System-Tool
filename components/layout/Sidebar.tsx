@@ -162,9 +162,11 @@ function PositionTab() {
               <input
                 type="number"
                 value={pos.position[axis as 'x' | 'y' | 'z']}
-                onChange={(e) => updateSensorPosition({
-                  position: { [axis]: parseFloat(e.target.value) || 0 }
-                })}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value) || 0
+                  const newPosition = { ...pos.position, [axis]: value }
+                  updateSensorPosition({ position: newPosition as { x: number; y: number; z: number } })
+                }}
                 className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-sm"
                 step="0.1"
               />
@@ -182,9 +184,11 @@ function PositionTab() {
               <input
                 type="number"
                 value={pos.rotation[axis as 'x' | 'y' | 'z']}
-                onChange={(e) => updateSensorPosition({
-                  rotation: { [axis]: parseFloat(e.target.value) || 0 }
-                })}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value) || 0
+                  const newRotation = { ...pos.rotation, [axis]: value }
+                  updateSensorPosition({ rotation: newRotation as { x: number; y: number; z: number } })
+                }}
                 className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-sm"
                 step="1"
               />
@@ -242,9 +246,11 @@ function MagnetTab() {
               <input
                 type="number"
                 value={magPos.position[axis as 'x' | 'y' | 'z']}
-                onChange={(e) => updateMagnetPosition({
-                  position: { [axis]: parseFloat(e.target.value) || 0 }
-                })}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value) || 0
+                  const newPosition = { ...magPos.position, [axis]: value }
+                  updateMagnetPosition({ position: newPosition as { x: number; y: number; z: number } })
+                }}
                 className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-sm"
                 step="0.1"
               />

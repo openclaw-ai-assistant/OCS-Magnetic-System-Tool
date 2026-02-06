@@ -1,24 +1,15 @@
 {
   "version": 2,
   "name": "ocs-magnetic-system-tool",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "npm install",
   "env": {
     "NEXT_TELEMETRY_DISABLED": "1"
   },
-  "build": {
-    "env": {
-      "NEXT_TELEMETRY_DISABLED": "1"
-    }
+  "github": {
+    "enabled": true,
+    "autoJobCancelation": true
   }
 }
