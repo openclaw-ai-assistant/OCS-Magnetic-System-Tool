@@ -12,12 +12,15 @@ import SimulationStep from '@/components/guide/SimulationStep'
 import OptimizationStep from '@/components/guide/OptimizationStep'
 import ResultsStep from '@/components/guide/ResultsStep'
 import AdvancedAnalysisStep from '@/components/guide/AdvancedAnalysisStep'
+import DesignValidationStep from '@/components/guide/DesignValidationStep'
+import PDFExportStep from '@/components/guide/PDFExportStep'
+import BatchScanStep from '@/components/guide/BatchScanStep'
 import MagneticField3D from '@/components/visualization/MagneticField3D'
 import Canvas3D from '@/components/layout/Canvas3D'
 import { Toaster } from 'react-hot-toast'
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 
-export type WizardStep = 'preset' | 'sensor' | 'magnet' | 'position' | 'field' | 'simulation' | 'optimization' | 'analysis' | 'results'
+export type WizardStep = 'preset' | 'sensor' | 'magnet' | 'position' | 'field' | 'validation' | 'simulation' | 'optimization' | 'batchscan' | 'analysis' | 'pdfexport' | 'results'
 
 export default function MagneticTool() {
   const [currentStep, setCurrentStep] = useState<WizardStep>('preset')
@@ -31,9 +34,12 @@ export default function MagneticTool() {
     { id: 'magnet', title: '选择磁铁', description: '选择或自定义磁铁' },
     { id: 'position', title: '配置位置', description: '调整传感器和磁铁位置' },
     { id: 'field', title: '磁场可视化', description: '3D磁场分布查看' },
+    { id: 'validation', title: '设计验证', description: '检查配置合理性' },
     { id: 'simulation', title: '运行仿真', description: '执行磁场计算' },
     { id: 'optimization', title: '自动优化', description: '寻找最佳配置' },
+    { id: 'batchscan', title: '参数扫描', description: '扫描参数空间' },
     { id: 'analysis', title: '高级分析', description: '深度数据分析' },
+    { id: 'pdfexport', title: '导出报告', description: '生成PDF文档' },
     { id: 'results', title: '查看结果', description: '分析仿真数据' },
   ]
 
@@ -106,12 +112,18 @@ export default function MagneticTool() {
         return <PositionStep onComplete={goToNext} />
       case 'field':
         return <FieldVisualizationStep onComplete={goToNext} />
+      case 'validation':
+        return <DesignValidationStep />
       case 'simulation':
         return <SimulationStep onComplete={goToNext} />
       case 'optimization':
         return <OptimizationStep onComplete={goToNext} />
+      case 'batchscan':
+        return <BatchScanStep onComplete={goToNext} />
       case 'analysis':
         return <AdvancedAnalysisStep onComplete={goToNext} />
+      case 'pdfexport':
+        return <PDFExportStep />
       case 'results':
         return <ResultsStep onRestart={restart} />
       default:
