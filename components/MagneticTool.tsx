@@ -11,12 +11,13 @@ import FieldVisualizationStep from '@/components/guide/FieldVisualizationStep'
 import SimulationStep from '@/components/guide/SimulationStep'
 import OptimizationStep from '@/components/guide/OptimizationStep'
 import ResultsStep from '@/components/guide/ResultsStep'
+import AdvancedAnalysisStep from '@/components/guide/AdvancedAnalysisStep'
 import MagneticField3D from '@/components/visualization/MagneticField3D'
 import Canvas3D from '@/components/layout/Canvas3D'
 import { Toaster } from 'react-hot-toast'
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 
-export type WizardStep = 'preset' | 'sensor' | 'magnet' | 'position' | 'field' | 'simulation' | 'optimization' | 'results'
+export type WizardStep = 'preset' | 'sensor' | 'magnet' | 'position' | 'field' | 'simulation' | 'optimization' | 'analysis' | 'results'
 
 export default function MagneticTool() {
   const [currentStep, setCurrentStep] = useState<WizardStep>('preset')
@@ -32,6 +33,7 @@ export default function MagneticTool() {
     { id: 'field', title: '磁场可视化', description: '3D磁场分布查看' },
     { id: 'simulation', title: '运行仿真', description: '执行磁场计算' },
     { id: 'optimization', title: '自动优化', description: '寻找最佳配置' },
+    { id: 'analysis', title: '高级分析', description: '深度数据分析' },
     { id: 'results', title: '查看结果', description: '分析仿真数据' },
   ]
 
@@ -108,6 +110,8 @@ export default function MagneticTool() {
         return <SimulationStep onComplete={goToNext} />
       case 'optimization':
         return <OptimizationStep onComplete={goToNext} />
+      case 'analysis':
+        return <AdvancedAnalysisStep onComplete={goToNext} />
       case 'results':
         return <ResultsStep onRestart={restart} />
       default:
