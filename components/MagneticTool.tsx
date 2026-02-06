@@ -15,24 +15,30 @@ import AdvancedAnalysisStep from '@/components/guide/AdvancedAnalysisStep'
 import DesignValidationStep from '@/components/guide/DesignValidationStep'
 import PDFExportStep from '@/components/guide/PDFExportStep'
 import BatchScanStep from '@/components/guide/BatchScanStep'
+import AIRecommendationStep from '@/components/guide/AIRecommendationStep'
+import CADUploadStep from '@/components/guide/CADUploadStep'
 import MagneticField3D from '@/components/visualization/MagneticField3D'
+import DraggablePositionTool from '@/components/visualization/DraggablePositionTool'
 import Canvas3D from '@/components/layout/Canvas3D'
 import { Toaster } from 'react-hot-toast'
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 
-export type WizardStep = 'preset' | 'sensor' | 'magnet' | 'position' | 'field' | 'validation' | 'simulation' | 'optimization' | 'batchscan' | 'analysis' | 'pdfexport' | 'results'
+export type WizardStep = 'airecommend' | 'preset' | 'sensor' | 'magnet' | 'position' | 'dragposition' | 'cadupload' | 'field' | 'validation' | 'simulation' | 'optimization' | 'batchscan' | 'analysis' | 'pdfexport' | 'results'
 
 export default function MagneticTool() {
-  const [currentStep, setCurrentStep] = useState<WizardStep>('preset')
+  const [currentStep, setCurrentStep] = useState<WizardStep>('airecommend')
   const [showPreview, setShowPreview] = useState(true)
   const [viewMode, setViewMode] = useState<'standard' | 'field'>('standard')
   const { configuration, isSimulating, simulationResult, resetConfiguration } = useToolStore()
 
   const steps: { id: WizardStep; title: string; description: string }[] = [
+    { id: 'airecommend', title: 'AI推荐', description: '智能配置推荐' },
     { id: 'preset', title: '选择预设', description: '快速开始或自定义' },
     { id: 'sensor', title: '选择传感器', description: '选择磁传感器型号' },
     { id: 'magnet', title: '选择磁铁', description: '选择或自定义磁铁' },
     { id: 'position', title: '配置位置', description: '调整传感器和磁铁位置' },
+    { id: 'dragposition', title: '拖拽调整', description: '可视化拖拽位置' },
+    { id: 'cadupload', title: 'CAD评估', description: '上传CAD自动评估' },
     { id: 'field', title: '磁场可视化', description: '3D磁场分布查看' },
     { id: 'validation', title: '设计验证', description: '检查配置合理性' },
     { id: 'simulation', title: '运行仿真', description: '执行磁场计算' },
@@ -102,6 +108,8 @@ export default function MagneticTool() {
 
   const renderStepContent = () => {
     switch (currentStep) {
+      case 'airecommend':
+        return <AIRecommendationStep onComplete={goToNext} />
       case 'preset':
         return <PresetStep onComplete={handlePresetComplete} />
       case 'sensor':
@@ -110,6 +118,10 @@ export default function MagneticTool() {
         return <MagnetStep onComplete={goToNext} />
       case 'position':
         return <PositionStep onComplete={goToNext} />
+      case 'dragposition':
+        return null // 使用右侧3D视图进行拖拽
+      case 'cadupload':
+        return <CADUploadStep onComplete={goToNext} />
       case 'field':
         return <FieldVisualizationStep onComplete={goToNext} />
       case 'validation':
@@ -223,8 +235,10 @@ export default function MagneticTool() {
         {/* Right Panel - 3D Preview */}
         {showPreview && (
           <div className="flex-1 relative bg-gradient-to-br from-slate-950 to-slate-900">
-            {/* 在磁场可视化步骤使用增强的3D磁场可视化 */}
-            {currentStep === 'field' ? (
+            {/* 根据步骤显示不同的3D视图 */}
+            {currentStep === 'dragposition' ? (
+              <DraggablePositionTool />
+            ) : currentStep === 'field' ? (
               <MagneticField3D />
             ) : (
               <Canvas3D />
