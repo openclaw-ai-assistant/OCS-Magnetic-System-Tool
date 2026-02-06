@@ -7,8 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "vercel-build": "npm install -D tailwindcss@3.3.6 postcss autoprefixer && npm run build"
+    "lint": "next lint"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.0",
@@ -19,17 +18,20 @@
     "@radix-ui/react-tooltip": "^1.0.0",
     "@react-three/drei": "^9.92.0",
     "@react-three/fiber": "^8.15.0",
+    "autoprefixer": "^10.4.16",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "lucide-react": "^0.294.0",
     "next": "^14.2.0",
+    "postcss": "^8.4.32",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "recharts": "^2.10.0",
     "tailwind-merge": "^2.0.0",
+    "tailwindcss": "^3.3.6",
     "three": "^0.160.0",
     "zustand": "^4.4.0"
   },
@@ -38,9 +40,6 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@types/three": "^0.160.0",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.32",
-    "tailwindcss": "^3.3.6",
     "typescript": "^5.3.0"
   }
 }
