@@ -7,18 +7,21 @@ import PresetStep from '@/components/guide/PresetStep'
 import SensorStep from '@/components/guide/SensorStep'
 import MagnetStep from '@/components/guide/MagnetStep'
 import PositionStep from '@/components/guide/PositionStep'
+import FieldVisualizationStep from '@/components/guide/FieldVisualizationStep'
 import SimulationStep from '@/components/guide/SimulationStep'
 import OptimizationStep from '@/components/guide/OptimizationStep'
 import ResultsStep from '@/components/guide/ResultsStep'
+import MagneticField3D from '@/components/visualization/MagneticField3D'
 import Canvas3D from '@/components/layout/Canvas3D'
 import { Toaster } from 'react-hot-toast'
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 
-export type WizardStep = 'preset' | 'sensor' | 'magnet' | 'position' | 'simulation' | 'optimization' | 'results'
+export type WizardStep = 'preset' | 'sensor' | 'magnet' | 'position' | 'field' | 'simulation' | 'optimization' | 'results'
 
 export default function MagneticTool() {
   const [currentStep, setCurrentStep] = useState<WizardStep>('preset')
   const [showPreview, setShowPreview] = useState(true)
+  const [viewMode, setViewMode] = useState<'standard' | 'field'>('standard')
   const { configuration, isSimulating, simulationResult, resetConfiguration } = useToolStore()
 
   const steps: { id: WizardStep; title: string; description: string }[] = [
@@ -26,6 +29,7 @@ export default function MagneticTool() {
     { id: 'sensor', title: '选择传感器', description: '选择磁传感器型号' },
     { id: 'magnet', title: '选择磁铁', description: '选择或自定义磁铁' },
     { id: 'position', title: '配置位置', description: '调整传感器和磁铁位置' },
+    { id: 'field', title: '磁场可视化', description: '3D磁场分布查看' },
     { id: 'simulation', title: '运行仿真', description: '执行磁场计算' },
     { id: 'optimization', title: '自动优化', description: '寻找最佳配置' },
     { id: 'results', title: '查看结果', description: '分析仿真数据' },
@@ -98,6 +102,8 @@ export default function MagneticTool() {
         return <MagnetStep onComplete={goToNext} />
       case 'position':
         return <PositionStep onComplete={goToNext} />
+      case 'field':
+        return <FieldVisualizationStep onComplete={goToNext} />
       case 'simulation':
         return <SimulationStep onComplete={goToNext} />
       case 'optimization':
@@ -201,26 +207,33 @@ export default function MagneticTool() {
         {/* Right Panel - 3D Preview */}
         {showPreview && (
           <div className="flex-1 relative bg-gradient-to-br from-slate-950 to-slate-900">
-            <Canvas3D />
+            {/* 在磁场可视化步骤使用增强的3D磁场可视化 */}
+            {currentStep === 'field' ? (
+              <MagneticField3D />
+            ) : (
+              <Canvas3D />
+            )}
             
-            {/* Info Overlay */}
-            <div className="absolute top-4 left-4 bg-slate-900/80 backdrop-blur-md rounded-xl p-4 border border-slate-700/50">
-              <h3 className="text-sm font-semibold mb-2">当前配置</h3>
-              <div className="space-y-1 text-xs text-slate-400">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                  传感器: {configuration.sensor?.name || '未选择'}
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                  磁铁: {configuration.magnet?.name || '未选择'}
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${simulationResult ? 'bg-purple-500' : 'bg-slate-600'}`}></span>
-                  仿真: {simulationResult ? '已完成' : '未运行'}
+            {/* Info Overlay - 在非磁场步骤显示 */}
+            {currentStep !== 'field' && (
+              <div className="absolute top-4 left-4 bg-slate-900/80 backdrop-blur-md rounded-xl p-4 border border-slate-700/50">
+                <h3 className="text-sm font-semibold mb-2">当前配置</h3>
+                <div className="space-y-1 text-xs text-slate-400">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                    传感器: {configuration.sensor?.name || '未选择'}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                    磁铁: {configuration.magnet?.name || '未选择'}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${simulationResult ? 'bg-purple-500' : 'bg-slate-600'}`}></span>
+                    仿真: {simulationResult ? '已完成' : '未运行'}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Simulation Progress */}
             {isSimulating && (
