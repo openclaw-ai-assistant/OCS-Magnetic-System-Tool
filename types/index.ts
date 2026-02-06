@@ -14,12 +14,19 @@ export type SensorMountType = 'end-of-shaft' | 'side-shaft' | 'side-shaft-orthog
 export interface Sensor {
   id: string
   name: string
+  description?: string
   family: SensorFamily
   mountType: SensorMountType
   resolution: number // bits
   maxRpm: number
   package: string
   features: string[]
+  specs?: {
+    resolution?: string
+    accuracy?: string
+    updateRate?: string
+    temperature?: string
+  }
 }
 
 // Magnet Types
@@ -30,6 +37,7 @@ export type MagnetizationDirection = 'axial' | 'diametrical' | 'radial'
 export interface Magnet {
   id: string
   name: string
+  description?: string
   shape: MagnetShape
   material: MagnetMaterial
   dimensions: {
@@ -78,6 +86,16 @@ export interface SimulationResult {
   linearity: number
   maxError: number
   rmsError: number
+  // Additional fields for UI
+  angleData: {
+    mechanicalAngle: number
+    electricalAngle: number
+    error: number
+    sinOutput: number
+    cosOutput: number
+  }[]
+  maxErrorAngle: number
+  avgError: number
 }
 
 // Complete Configuration

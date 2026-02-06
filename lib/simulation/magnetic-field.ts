@@ -199,6 +199,29 @@ export function simulateSensorOutput(
     // Calculate linearity (max deviation from best fit line)
     const linearity = calculateLinearity(angleError)
     
+    // Find max error angle
+    let maxErrorAngle = 0
+    let maxAbsError = 0
+    angleError.forEach((error, idx) => {
+      const absError = Math.abs(error)
+      if (absError > maxAbsError) {
+        maxAbsError = absError
+        maxErrorAngle = idx * angleStep
+      }
+    })
+    
+    // Calculate average error
+    const avgError = angleError.reduce((sum, e) => sum + Math.abs(e), 0) / samples
+    
+    // Build angle data array
+    const angleData = angleError.map((error, idx) => ({
+      mechanicalAngle: idx * angleStep,
+      electricalAngle: (idx * angleStep) % 360,
+      error: error,
+      sinOutput: sinSignal[idx],
+      cosOutput: cosSignal[idx]
+    }))
+    
     resolve({
       angleError,
       magneticField,
@@ -206,7 +229,10 @@ export function simulateSensorOutput(
       snr,
       linearity,
       maxError,
-      rmsError
+      rmsError,
+      angleData,
+      maxErrorAngle,
+      avgError
     })
   })
 }
@@ -231,8 +257,19 @@ function createEmptyResult(): SimulationResult {
     snr: 0,
     linearity: 0,
     maxError: 0,
-    rmsError: 0
+    rmsError: 0,
+    angleData: [],
+    maxErrorAngle: 0,
+    avgError: 0
   }
+}
+
+// Single simulation with progress tracking
+export async function runSimulation(
+  configuration: ToolConfiguration,
+  onProgress?: (progress: number) => void
+): Promise<SimulationResult> {
+  return simulateSensorOutput(configuration, onProgress)
 }
 
 // Batch simulation
